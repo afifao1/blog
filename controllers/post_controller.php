@@ -1,13 +1,14 @@
 <?php
-require  '../models/db.php';
+require __DIR__.'/../models/db.php';
 
-$fetchPosts = function() use ($db) {
+$fetchPost = function($id) use ($db) {
     $stmt = $db->prepare("SELECT * FROM posts WHERE id = :id");
     $stmt->execute(['id' => $id]);
     $post = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if (!$post) die("Post not found!");
-return $posts;
+    
+    return $post;
 };
 
 function createPost($title, $text, $user_id, $status) {
@@ -93,3 +94,15 @@ function registerUser($name, $email, $password) {
         exit;
     }
 }
+
+$searchPosts = function($searchPhrase) use ($db){
+  $query = "SELECT * FROM posts WHERE title LIKE :searchPhrase";
+  $stmt = $db->prepare($query);
+  $stmt->execute([':searchPhrase'=>"%$searchPhrase%"]);
+  return $stmt->fetchAll();
+};
+
+$fetchPosts = function() use ($db) {
+  $stmt = $db->query("SELECT * FROM posts WHERE status = 'published' ORDER BY created_at DESC");
+  return $stmt->fetchAll();
+};

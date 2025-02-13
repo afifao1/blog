@@ -1,5 +1,5 @@
 <?php
-include './models/db.php';
+require './controllers/post_controller.php';
 
 session_start();
 
@@ -8,8 +8,9 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
-$stmt = $db->query("SELECT * FROM posts WHERE status = 'published' ORDER BY created_at DESC");
-$posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$searchPhrase = $_GET['search'] ?? '';
+
+$posts = $searchPhrase ? $searchPosts($searchPhrase) : $fetchPosts();
 ?>
 
 <!DOCTYPE html>
@@ -25,11 +26,18 @@ $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <div class="links">
             <a class="add_post" href="views/create.php">Add new post</a>
+            <form action="" method="get">
+                <input type="text" name="search" placeholder="Search">
+            </form>
             <a class="add_post" href="views/my_posts.php">My posts</a>
             <a class="add_post" href="views/logout.php">Exit</a>
         </div>
 
-        <?php foreach ($posts as $post): ?>
+        <?php
+          if(!$posts){
+            echo 'Posts not found';
+          }
+          foreach ($posts as $post): ?>
             <div class="blog">
                 <h3>
                     <a class="h3" href="views/post.php?id=<?= $post['id'] ?>">
