@@ -2,7 +2,9 @@
 session_start();
 
 // include  '../models/db.php';
-require '../controllers/post_controller.php';
+
+require_once '../controllers/post_controller.php';
+require_once '../models/db.php';
 
 $id = $_GET['id'] ?? null;
 if (!$id) die("Post not found!");

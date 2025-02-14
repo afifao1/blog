@@ -1,6 +1,10 @@
 <?php
 session_start();
-include '../controllers/post_controller.php';
+// include '../controllers/post_controller.php';
+
+require_once '../controllers/post_controller.php';
+// require_once '../models/db.php';
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST['name']);

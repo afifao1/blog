@@ -1,7 +1,9 @@
 <?php
-require './controllers/post_controller.php';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-session_start();
+require './controllers/post_controller.php';
+// session_start();
 
 if (!isset($_SESSION['user'])) {
     header("Location: views/login.php");
@@ -9,8 +11,9 @@ if (!isset($_SESSION['user'])) {
 }
 
 $searchPhrase = $_GET['search'] ?? '';
+$category = $_GET['category'] ?? '';
 
-$posts = $searchPhrase ? $searchPosts($searchPhrase) : $fetchPosts();
+$posts = $searchPhrase ? searchPosts($searchPhrase) : fetchPosts($category);
 ?>
 
 <!DOCTYPE html>
@@ -27,36 +30,44 @@ $posts = $searchPhrase ? $searchPosts($searchPhrase) : $fetchPosts();
         <div class="links">
             <a class="add_post" href="views/create.php">Add new post</a>
             <form action="" method="get">
-                <input type="text" name="search" placeholder="Search">
+                <input type="text" name="search" placeholder="Search" value="<?= htmlspecialchars($searchPhrase) ?>">
+                <select name="category">
+                    <option value="">All Categories</option>
+                    <option value="IT" <?= $category === 'IT' ? 'selected' : '' ?>>IT</option>
+                    <option value="Shaxsiy" <?= $category === 'Shaxsiy' ? 'selected' : '' ?>>Shaxsiy</option>
+                    <option value="Sport" <?= $category === 'Sport' ? 'selected' : '' ?>>Sport</option>
+                </select>
+                <button type="submit">Filter</button>
             </form>
             <a class="add_post" href="views/my_posts.php">My posts</a>
             <a class="add_post" href="views/logout.php">Exit</a>
         </div>
 
-        <?php
-          if(!$posts){
-            echo 'Posts not found';
-          }
-          foreach ($posts as $post): ?>
-            <div class="blog">
-                <h3>
-                    <a class="h3" href="views/post.php?id=<?= $post['id'] ?>">
-                        <?= htmlspecialchars($post['title']) ?>
-                    </a>
-                </h3>
-                <span><?= $post['created_at'] ?></span>
-                <span><i><?= $post['updated_at'] ?></i></span>
-                <p><?= nl2br(htmlspecialchars(substr($post['text'], 0, 100))) ?>...</p>
-                
-                <?php if ($_SESSION['user']['id'] == $post['user_id']): ?>
-                    <a class="edit" href="views/edit.php?id=<?= $post['id'] ?>">edit</a>
-                    <form method="post" action="controllers/post_controller.php" style="display:inline;">
-                        <input type="hidden" name="delete_id" value="<?= $post['id'] ?>">
-                        <button class="delete" type="submit" onclick="return confirm('Do you want to delete?')">Delete</button>
-                    </form>
-                <?php endif; ?>
-            </div>
-        <?php endforeach; ?>
+        <?php if (!$posts): ?>
+            <p>Posts not found</p>
+        <?php else: ?>
+            <?php foreach ($posts as $post): ?>
+                <div class="blog">
+                    <h3>
+                        <a class="h3" href="views/post.php?id=<?= $post['id'] ?>">
+                            <?= htmlspecialchars($post['title']) ?>
+                        </a>
+                    </h3>
+                    <span><?= $post['created_at'] ?></span>
+                    <p><?= nl2br(htmlspecialchars(substr($post['text'], 0, 100))) ?>...</p>
+                    <b>Category: <?= htmlspecialchars($post['category']) ?></b>
+                        <?php if ($_SESSION['user']['id'] == $post['user_id']): ?>
+                            <div class="actions">
+                                <a class="edit" href="views/edit.php?id=<?= $post['id'] ?>">edit</a>
+                                <form method="post" action="controllers/post_controller.php">
+                                    <input type="hidden" name="delete_id" value="<?= $post['id'] ?>">
+                                    <button class="delete" type="submit" onclick="return confirm('Do you want to delete?')">Delete</button>
+                                </form>
+                            </div>
+                        <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 </body>
 </html>

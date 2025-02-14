@@ -27,3 +27,13 @@ try {
 } catch (PDOException $e) {
     die("Xatolik: " . $e->getMessage());
 }
+
+// category ustuni mavjud emasligini tekshirib, qo'shish
+$checkColumn = $db->query("SHOW COLUMNS FROM posts LIKE 'category'");
+if (!$checkColumn->fetch()) {
+    $db->exec("ALTER TABLE posts ADD COLUMN category ENUM('IT', 'Shaxsiy', 'Sport') NOT NULL DEFAULT 'Shaxsiy'");
+    echo "Category column successfully added!";
+} else {
+    echo "Category column already exists!";
+}
+
