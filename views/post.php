@@ -1,16 +1,16 @@
 <?php
-require "../controllers/post_controller.php";
+require "../models/db.php"; // PDO ulanishi
+require "../controllers/post_controller.php"; // Postni olish uchun funksiya
 
-$id = $_GET['id'] ?? '';
+if (isset($_GET['id'])) {
+    $post_id = $_GET['id'];
+    $post = fetchPost($db, $post_id); // $pdo o‘rniga $db
 
-if (!$id) {
-    die("Xatolik: Post ID topilmadi.");
-}
-
-$post = fetchPost($id);
-
-if (!$post) {
-    die("Xatolik: Post topilmadi.");
+    if (!$post) {
+        die("Post topilmadi!");
+    }
+} else {
+    die("ID berilmagan!");
 }
 ?>
 

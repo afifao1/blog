@@ -151,6 +151,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_id'])) {
     header("Location: ../views/my_posts.php");
     exit;
 }
+
+function fetchPost($db, $post_id) { // $pdo o‘rniga $db ishlatyapmiz
+    $stmt = $db->prepare("SELECT * FROM posts WHERE id = :post_id LIMIT 1");
+    $stmt->bindParam(':post_id', $post_id, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+
+function countPosts($category = '') {
+    // require_once __DIR__ . '/../models/db.php'; // Bazani ulash
+
+    global $db; 
+
+    $query = "SELECT COUNT(*) FROM posts WHERE status = 'published'";
+
+    if (!empty($category)) {
+        $query .= " AND category = :category";
+    }
+
+    $stmt = $db->prepare($query);
+
+    if (!empty($category)) {
+        $stmt->bindParam(':category', $category, PDO::PARAM_STR);
+    }
+
+    $stmt->execute();
+    return $stmt->fetchColumn();
+}
+
+
 ?>
 
 

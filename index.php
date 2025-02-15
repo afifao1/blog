@@ -1,9 +1,5 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require './controllers/post_controller.php';
-// session_start();
 
 if (!isset($_SESSION['user'])) {
     header("Location: views/login.php");
@@ -13,7 +9,17 @@ if (!isset($_SESSION['user'])) {
 $searchPhrase = $_GET['search'] ?? '';
 $category = $_GET['category'] ?? '';
 
+$page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+$limit = 5;
+$offset = ($page - 1) * $limit;
+
+$totalPosts = countPosts($category);
+$totalPages = ceil($totalPosts / $limit);
+
 $posts = $searchPhrase ? searchPosts($searchPhrase) : fetchPosts($category);
+
+// Paginatsiya uchun postlarni filtrlash
+$posts = array_slice($posts, $offset, $limit);
 ?>
 
 <!DOCTYPE html>
@@ -23,6 +29,7 @@ $posts = $searchPhrase ? searchPosts($searchPhrase) : fetchPosts($category);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Personal Blog</title>
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/pagination.css">
 </head>
 <body>
     <h1 class="center">Personal Blog</h1>
@@ -67,6 +74,19 @@ $posts = $searchPhrase ? searchPosts($searchPhrase) : fetchPosts($category);
                         <?php endif; ?>
                 </div>
             <?php endforeach; ?>
+
+            <!-- Paginatsiya -->
+            <div class="pagination">
+                <?php if ($page > 1): ?>
+                    <a href="?page=<?= $page - 1 ?>&category=<?= urlencode($category) ?>" class="prev">← Previous</a>
+                <?php endif; ?>
+
+                <span>Page <?= $page ?> of <?= $totalPages ?></span>
+
+                <?php if ($page < $totalPages): ?>
+                    <a href="?page=<?= $page + 1 ?>&category=<?= urlencode($category) ?>" class="next">Next →</a>
+                <?php endif; ?>
+            </div>
         <?php endif; ?>
     </div>
 </body>
