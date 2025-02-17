@@ -1,47 +1,49 @@
-Loyihaga Kirish
+Personal Blog - README
 
-Personal Blog - bu shaxsiy blog tizimi bo‘lib, foydalanuvchilar postlar yaratishi, tahrirlashi va o‘chirishlari mumkin. Blog postlari published yoki drafted holatida bo‘lishi mumkin. Foydalanuvchilar faqat o‘z postlarini boshqarish imkoniyatiga ega.
+Project Introduction
 
-Xususiyatlar
+Personal Blog is a personal blogging system where users can create, edit, and delete posts. Blog posts can have either published or drafted status. Users can only manage their own posts.
 
-Foydalanuvchilar ro‘yxatdan o‘tishi va tizimga kirishi mumkin
+Features
 
-Blog postlar yaratish, tahrirlash va o‘chirish imkoniyati
+Users can register and log in
 
-Postlarga kategoriya va status (Published, Drafted) qo‘shish
+Ability to create, edit, and delete blog posts
 
-Admin paneli orqali postlarni boshqarish va filtrlash
+Assign categories and statuses (Published, Drafted) to posts
 
-Asosiy sahifada faqat published holatidagi postlarni ko‘rsatish
+Manage and filter posts through the admin panel
 
-Muallif faqat o‘zining drafted postlarini "Mening postlarim" sahifasida ko‘rishi mumkin
+Display only published posts on the main page
 
-Postlar uchun rasm yuklash imkoniyati
+Authors can view only their own drafted posts in the "My Posts" section
 
-O‘rnatish bo‘yicha yo‘riqnoma
+Ability to upload images for posts
 
-1. Talablar
+Installation Guide
 
-Loyiha quyidagi texnologiyalarni talab qiladi:
+1. Requirements
+
+The project requires the following technologies:
 
 PHP 8+
 
 MySQL
 
-Serverni ishga tushirish
+Start the Server
 
 php -S localhost:8000 -t public
 
-Foydalanish
+Usage
 
-Tizimga kirish uchun /login sahifasidan foydalaning
+Use the /login page to access the system
 
-Post yaratish uchun "Yangi post qo‘shish" tugmasidan foydalaning
+Click the "Create New Post" button to add a post
 
-Postni drafted yoki published holatiga o‘tkazish mumkin
+Change post status to drafted or published
 
-Admin paneli orqali barcha postlarni filtrlash va boshqarish mumkin
+Manage and filter posts via the admin panel
 
-Xulosa
+Conclusion
 
-Personal Blog - bu shaxsiy blog yuritish uchun yengil va qulay platforma. Kelajakda yangi imkoniyatlar qo‘shilishi rejalashtirilgan.
+Personal Blog is a lightweight and user-friendly platform for maintaining a personal blog. Future updates will include additional features.
